@@ -6,6 +6,7 @@ console.log('loading and starting');
 var finalhandler = require('finalhandler');
 var http = require('http');
 var serveStatic = require('serve-static');
+var path = require('path');
 
 //spacebrew modules
 var SpacebrewManager = require('@spacebrew/server-core').Manager;
@@ -15,13 +16,14 @@ var WebSocketServer = require('@spacebrew/server-websocket');
 Server and handling for the admin interface
 **/
 // Serve up public folder
-var serve = serveStatic('public', {'index': ['index.html', 'index.htm']});
+var publicPath = path.join(__dirname, 'public');
+var serve = serveStatic(publicPath, {'index': ['index.html', 'index.htm']});
 
 // Create server
 var server = http.createServer(function onRequest (req, res) {
   serve(req, res, finalhandler(req, res));
-})
- 
+});
+
 // Listen
 server.listen(9000);
 
