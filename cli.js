@@ -1,12 +1,17 @@
 #!/usr/bin/env node
 
-console.log('loading and starting');
-
 //for serving admin interface
 var finalhandler = require('finalhandler');
 var http = require('http');
 var serveStatic = require('serve-static');
 var path = require('path');
+var commander = require('commander');
+
+commander
+    .version(require('./package.json').version)
+    .option('-p, --port [number]', 'set port', '9000')
+    .option('-i, --interface [ip]', 'set interface', '0.0.0.0')
+    .parse(process.argv)
 
 //spacebrew modules
 var SpacebrewManager = require('@spacebrew/server-core').Manager;
@@ -25,12 +30,17 @@ var server = http.createServer(function onRequest (req, res) {
 });
 
 // Listen
-server.listen(9000);
+server.listen(commander.port, commander.interface, onListening);
+
+function onListening(){
+  var addr = server.address();
+  console.log(
+    'Spacebrew server listening on interface',
+    addr.address, 'and port', addr.port);
+}
 
 /**
 Spacebrew comm and routing
 **/
 var sbManager = new SpacebrewManager();
 var wsServer = new WebSocketServer(sbManager, {server});
-
-console.log('loaded and started');
