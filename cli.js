@@ -37,6 +37,9 @@ function onListening(){
   console.log(
     'Spacebrew server listening on interface',
     addr.address, 'and port', addr.port);
+  console.log(
+    'Press Ctrl+C to stop the server'
+  )
 }
 
 /**
